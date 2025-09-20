@@ -1,0 +1,125 @@
+services:
+  # PostgreSQL Database (Starts first)
+  strapi-db:
+    container_name: strapi-db
+    platform: linux/amd64 #for platform error on Apple M1 chips
+    restart: unless-stopped
+    image: postgres:16.0-alpine
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - strapi-data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    networks:
+      - educado-network
+
+  # MongoDB Database (for backend)
+  backend-db:
+    container_name: backend-db
+    restart: unless-stopped
+    image: mongo:7.0
+    env_file: .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+    volumes:
+      - backend-data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - educado-network
+
+  # Strapi CMS
+  strapi:
+    container_name: strapi
+    build:
+      context: ./strapi
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      STRAPI_DB_CLIENT: ${STRAPI_DB_CLIENT}
+      STRAPI_DB_HOST: ${STRAPI_DB_HOST}
+      STRAPI_DB_PORT: ${STRAPI_DB_PORT}
+      STRAPI_DB_NAME: ${STRAPI_DB_NAME}
+      STRAPI_DB_USERNAME: ${STRAPI_DB_USERNAME}
+      STRAPI_DB_PASSWORD: ${STRAPI_DB_PASSWORD}
+      STRAPI_JWT_SECRET: ${STRAPI_JWT_SECRET}
+      STRAPI_ADMIN_JWT_SECRET: ${STRAPI_ADMIN_JWT_SECRET}
+      STRAPI_APP_KEYS: ${STRAPI_APP_KEYS}
+      STRAPI_API_TOKEN_SALT: ${STRAPI_API_TOKEN_SALT}
+      STRAPI_TRANSFER_TOKEN_SALT: ${STRAPI_TRANSFER_TOKEN_SALT}
+      NODE_ENV: ${NODE_ENV}
+    volumes:
+      - ./strapi/config:/opt/app/config
+      - ./strapi/src:/opt/app/src
+      - ./strapi/package.json:/opt/app/package.json
+      - ./strapi/.env:/opt/app/.env
+      - ./strapi/public/uploads:/opt/app/public/uploads
+    ports:
+      - "1337:1337"
+    networks:
+      - educado-network
+    depends_on:
+      - strapi-db
+
+  # Node.js Backend API
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${BACKEND_PORT}
+      STRAPI_URL: ${STRAPI_URL}
+      STRAPI_API_TOKEN: ${STRAPI_API_TOKEN}
+      MONGODB_URI: ${MONGODB_URI}
+      MONGODB_HOST: ${MONGODB_HOST}
+      MONGODB_PORT: ${MONGODB_PORT}
+      MONGODB_DATABASE: ${MONGODB_DATABASE}
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/package.json:/app/package.json
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    networks:
+      - educado-network
+    depends_on:
+      - strapi
+      - backend-db
+
+  # React Frontend with Nginx (Starts last)
+  # STACK ENTRYPOINT. Proxies to backend and serves frontend.
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+      VITE_STRAPI_URL: ${VITE_STRAPI_URL}
+    ports:
+      - "${FRONTEND_PORT}:80"
+    networks:
+      - educado-network
+    depends_on:
+      - backend
+
+volumes:
+  strapi-data:
+  backend-data:
+
+networks:
+  educado-network:
+    name: ${NETWORK_NAME}
+    driver: bridge

@@ -1,0 +1,25 @@
+{
+  "language": {
+    "portuguese": "Portuguese",
+    "english": "English",
+    "switchLanguage": "Switch Language"
+  },
+  "login": {
+    "title": "Login to your account",
+    "subtitle": "Enter your email below to login to your account",
+    "email": "Email",
+    "emailPlaceholder": "m@example.com",
+    "password": "Password",
+    "forgotPassword": "Forgot your password?",
+    "role": "Role",
+    "roleAuthor": "Author",
+    "roleAdmin": "Admin",
+    "selectRole": "Select a role",
+    "loginButton": "Login",
+    "loadingLogin": "Logging in...",
+    "orContinueWith": "Or continue with",
+    "loginWithGitHub": "Login with GitHub",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up"
+  }
+}

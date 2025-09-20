@@ -1,0 +1,167 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Updated color scheme to match Figma design with teal primary colors */
+  --background: #fafeff; /* Very light blue background */
+  --foreground: #383838; /* Dark gray text */
+  --card: #ffffff; /* Pure white cards */
+  --card-foreground: #383838; /* Dark gray text on cards */
+  --popover: #ffffff; /* White popovers */
+  --popover-foreground: #383838; /* Dark gray text in popovers */
+  --primary: #166276; /* Main teal color from Figma */
+  --primary-foreground: #ffffff; /* White text on primary */
+  --secondary: #d8eff3; /* Light teal for secondary elements */
+  --secondary-foreground: #246670; /* Dark teal text on secondary */
+  --muted: #c1cfd7; /* Light blue-gray for muted elements */
+  --muted-foreground: #4e6879; /* Dark blue-gray for muted text */
+  --accent: #87ced9; /* Light cyan for accents */
+  --accent-foreground: #246670; /* Dark teal text on accents */
+  --destructive: #d62b25; /* Red for destructive actions */
+  --destructive-foreground: #ffffff; /* White text on destructive */
+  --border: #c1cfd7; /* Light blue-gray borders */
+  --input: #ffffff; /* White input backgrounds */
+  --ring: #35a1b1; /* Teal focus rings */
+  --chart-1: #166276; /* Primary teal for charts */
+  --chart-2: #35a1b1; /* Secondary teal for charts */
+  --chart-3: #87ced9; /* Light cyan for charts */
+  --chart-4: #628397; /* Blue-gray for charts */
+  --chart-5: #8956bf; /* Purple accent for charts */
+  --radius: 0.5rem; /* Slightly smaller radius to match Figma */
+  --sidebar: #fafeff; /* Light background for sidebar */
+  --sidebar-foreground: #383838; /* Dark text in sidebar */
+  --sidebar-primary: #166276; /* Primary teal in sidebar */
+  --sidebar-primary-foreground: #ffffff; /* White text on sidebar primary */
+  --sidebar-accent: #d8eff3; /* Light teal accent in sidebar */
+  --sidebar-accent-foreground: #246670; /* Dark teal text on sidebar accent */
+  --sidebar-border: #c1cfd7; /* Light borders in sidebar */
+  --sidebar-ring: #35a1b1; /* Teal focus rings in sidebar */
+}
+
+.dark {
+  /* Updated dark mode colors to complement the teal theme */
+  --background: #141b1f; /* Very dark background */
+  --foreground: #fdfeff; /* Almost white text */
+  --card: #28363e; /* Dark gray cards */
+  --card-foreground: #fdfeff; /* Light text on cards */
+  --popover: #28363e; /* Dark popovers */
+  --popover-foreground: #fdfeff; /* Light text in popovers */
+  --primary: #35a1b1; /* Brighter teal for dark mode */
+  --primary-foreground: #141b1f; /* Dark text on primary */
+  --secondary: #246670; /* Darker teal for secondary */
+  --secondary-foreground: #d8eff3; /* Light teal text on secondary */
+  --muted: #4e6879; /* Dark blue-gray for muted */
+  --muted-foreground: #628397; /* Lighter blue-gray for muted text */
+  --accent: #246670; /* Dark teal for accents */
+  --accent-foreground: #87ced9; /* Light cyan text on accents */
+  --destructive: #d62b25; /* Same red for destructive */
+  --destructive-foreground: #fdfeff; /* Light text on destructive */
+  --border: #4e6879; /* Dark blue-gray borders */
+  --input: #28363e; /* Dark input backgrounds */
+  --ring: #87ced9; /* Light cyan focus rings */
+  --chart-1: #35a1b1; /* Bright teal for charts */
+  --chart-2: #87ced9; /* Light cyan for charts */
+  --chart-3: #d8eff3; /* Very light teal for charts */
+  --chart-4: #628397; /* Blue-gray for charts */
+  --chart-5: #8956bf; /* Purple accent for charts */
+  --sidebar: #141b1f; /* Dark sidebar background */
+  --sidebar-foreground: #fdfeff; /* Light sidebar text */
+  --sidebar-primary: #35a1b1; /* Bright teal in sidebar */
+  --sidebar-primary-foreground: #141b1f; /* Dark text on sidebar primary */
+  --sidebar-accent: #246670; /* Dark teal accent in sidebar */
+  --sidebar-accent-foreground: #d8eff3; /* Light text on sidebar accent */
+  --sidebar-border: #4e6879; /* Dark borders in sidebar */
+  --sidebar-ring: #87ced9; /* Light cyan focus rings in sidebar */
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Fixed input styling to use proper border color instead of input color */
+  input[data-slot='input'] {
+    @apply border-2 border-border bg-input;
+    @apply focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20;
+    @apply transition-all duration-200;
+    @apply placeholder:text-muted-foreground/70;
+    @apply text-foreground;
+    @apply rounded-md;
+    @apply px-3 py-2;
+    @apply text-base;
+    @apply shadow-sm;
+    @apply h-10;
+  }
+
+  /* Enhanced label styling for better visual hierarchy */
+  label[data-slot='label'] {
+    @apply text-foreground font-medium text-sm;
+  }
+
+  /* Better error state styling */
+  input[data-slot='input'][aria-invalid='true'] {
+    @apply border-destructive/60 focus-visible:border-destructive focus-visible:ring-destructive/20;
+  }
+
+  /* Enhanced button styling to match the teal theme */
+  button[data-slot='button'] {
+    @apply transition-all duration-200;
+    @apply font-medium;
+  }
+
+  /* Form spacing improvements */
+  .form-field {
+    @apply space-y-2;
+  }
+
+  /* Card styling improvements for forms */
+  .form-card {
+    @apply bg-card border border-border/50 rounded-xl p-6 shadow-sm;
+  }
+}
