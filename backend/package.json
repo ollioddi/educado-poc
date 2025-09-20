@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "generate-strapi-client": "openapi --input ../openapi/strapi-spec.json --output ./src/shared/api/strapi --client fetch"
   },
   "dependencies": {
     "express": "^5.1.0"
@@ -22,6 +23,7 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-sonarjs": "^3.0.5",
     "eslint-plugin-unicorn": "^61.0.2",
+    "openapi-typescript-codegen": "^0.29.0",
     "tsx": "^4.20.5",
     "typescript": "^5.7.2"
   }

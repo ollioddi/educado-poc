@@ -3,9 +3,15 @@ import cors from 'cors';
 import { errorHandler } from '@shared/middleware/error-handler';
 import { logger } from '@shared/middleware/logger';
 import { helloRoutes } from '@features/hello/routes/hello-routes';
+import { courseRoutes } from '@features/course/routes/course-routes';
+import { OpenAPI } from '@shared/api/strapi';
 
 const app: Express = express();
 const PORT = process.env.PORT || 3001;
+
+// Configure Strapi client
+OpenAPI.BASE = process.env.STRAPI_URL || 'http://localhost:1337';
+OpenAPI.TOKEN = process.env.STRAPI_API_TOKEN;
 
 // Middleware
 app.use(cors());
@@ -20,6 +26,7 @@ app.get('/health', (req, res) => {
 
 // Feature routes
 app.use('/api/hello', helloRoutes);
+app.use('/api/courses', courseRoutes);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);
@@ -32,6 +39,7 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📊 Health check available at http://localhost:${PORT}/health`);
+  console.log(`📚 Courses API available at http://localhost:${PORT}/api/courses`);
 });
 
 export default app;

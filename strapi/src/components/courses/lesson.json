@@ -1,0 +1,50 @@
+{
+  "collectionName": "components_courses_lessons",
+  "info": {
+    "displayName": "Lesson"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "video",
+        "text"
+      ]
+    },
+    "text_content": {
+      "type": "blocks",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "type"
+            },
+            "text"
+          ]
+        }
+      }
+    },
+    "video_content": {
+      "type": "media",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "type"
+            },
+            "video"
+          ]
+        }
+      },
+      "multiple": false,
+      "allowedTypes": [
+        "videos"
+      ]
+    }
+  },
+  "config": {}
+}

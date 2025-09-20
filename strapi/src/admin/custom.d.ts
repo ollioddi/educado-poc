@@ -1,0 +1,16 @@
+// path: src/admin/custom.d.ts
+
+declare module '*.png' {
+    const value: any;
+    export default value;
+}
+
+declare module '*.ico' {
+    const value: any;
+    export default value;
+}
+
+declare module '*.svg' {
+    const value: any;
+    export default value;
+}

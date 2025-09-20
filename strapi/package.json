@@ -7,15 +7,16 @@
     "build": "strapi build",
     "console": "strapi console",
     "deploy": "strapi deploy",
-    "dev": "strapi develop",
-    "develop": "strapi develop",
-    "start": "strapi start",
-    "strapi": "strapi",
+    "dev": "cross-env ENV_PATH=../.env NODE_OPTIONS=\"--max-old-space-size=4096\" strapi develop",
+    "develop": "cross-env ENV_PATH=../.env NODE_OPTIONS=\"--max-old-space-size=4096\" strapi develop",
+    "start": "cross-env ENV_PATH=../.env strapi start",
+    "strapi": "cross-env ENV_PATH=../.env strapi",
     "upgrade": "pnpm dlx @strapi/upgrade latest",
-    "upgrade:dry": "pnpm dlx @strapi/upgrade latest --dry"
+    "upgrade:dry": "pnpm dlx @strapi/upgrade latest --dry",
+    "generate-spec": "cross-env ENV_PATH=../.env strapi openapi generate --output ../openapi/strapi-spec.json"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "5.23.5",
+    "@strapi/plugin-documentation": "^5.23.6",
     "@strapi/plugin-users-permissions": "5.23.5",
     "@strapi/strapi": "5.23.5",
     "pg": "8.8.0",
@@ -28,7 +29,9 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "typescript": "^5"
+    "cross-env": "^10.0.0",
+    "typescript": "^5",
+    "vite": "^6.3.6"
   },
   "engines": {
     "node": ">=18.0.0 <=22.x.x",

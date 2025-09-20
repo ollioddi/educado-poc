@@ -5,7 +5,9 @@ services:
     platform: linux/amd64 #for platform error on Apple M1 chips
     restart: unless-stopped
     image: postgres:16.0-alpine
-    env_file: .env
+    env_file:
+      - .env
+      - .env.docker
     environment:
       POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
@@ -22,7 +24,9 @@ services:
     container_name: backend-db
     restart: unless-stopped
     image: mongo:7.0
-    env_file: .env
+    env_file:
+      - .env
+      - .env.docker
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
@@ -38,29 +42,33 @@ services:
   strapi:
     container_name: strapi
     build:
-      context: ./strapi
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./strapi/Dockerfile
     restart: unless-stopped
-    env_file: .env
+    env_file:
+      - .env
+      - .env.docker
     environment:
-      STRAPI_DB_CLIENT: ${STRAPI_DB_CLIENT}
-      STRAPI_DB_HOST: ${STRAPI_DB_HOST}
-      STRAPI_DB_PORT: ${STRAPI_DB_PORT}
-      STRAPI_DB_NAME: ${STRAPI_DB_NAME}
-      STRAPI_DB_USERNAME: ${STRAPI_DB_USERNAME}
-      STRAPI_DB_PASSWORD: ${STRAPI_DB_PASSWORD}
-      STRAPI_JWT_SECRET: ${STRAPI_JWT_SECRET}
-      STRAPI_ADMIN_JWT_SECRET: ${STRAPI_ADMIN_JWT_SECRET}
-      STRAPI_APP_KEYS: ${STRAPI_APP_KEYS}
-      STRAPI_API_TOKEN_SALT: ${STRAPI_API_TOKEN_SALT}
-      STRAPI_TRANSFER_TOKEN_SALT: ${STRAPI_TRANSFER_TOKEN_SALT}
-      NODE_ENV: ${NODE_ENV}
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 1337
+      # Database Configuration (using standard Strapi names)
+      DATABASE_CLIENT: ${DATABASE_CLIENT}
+      DATABASE_HOST: strapi-db
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_SSL: false
+      # Strapi Secrets
+      APP_KEYS: ${APP_KEYS}
+      API_TOKEN_SALT: ${API_TOKEN_SALT}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
+      JWT_SECRET: ${JWT_SECRET}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
     volumes:
-      - ./strapi/config:/opt/app/config
-      - ./strapi/src:/opt/app/src
-      - ./strapi/package.json:/opt/app/package.json
-      - ./strapi/.env:/opt/app/.env
-      - ./strapi/public/uploads:/opt/app/public/uploads
+      - strapi-uploads:/opt/app/public/uploads
     ports:
       - "1337:1337"
     networks:
@@ -75,7 +83,9 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     restart: unless-stopped
-    env_file: .env
+    env_file:
+      - .env
+      - .env.docker
     environment:
       NODE_ENV: ${NODE_ENV}
       PORT: ${BACKEND_PORT}
@@ -85,11 +95,8 @@ services:
       MONGODB_HOST: ${MONGODB_HOST}
       MONGODB_PORT: ${MONGODB_PORT}
       MONGODB_DATABASE: ${MONGODB_DATABASE}
-    volumes:
-      - ./backend/src:/app/src
-      - ./backend/package.json:/app/package.json
     ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
+      - "${BACKEND_PORT}:8080"
     networks:
       - educado-network
     depends_on:
@@ -104,7 +111,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     restart: unless-stopped
-    env_file: .env
+    env_file:
+      - .env
+      - .env.docker
     environment:
       VITE_API_BASE_URL: ${VITE_API_BASE_URL}
       VITE_STRAPI_URL: ${VITE_STRAPI_URL}
@@ -117,6 +126,7 @@ services:
 
 volumes:
   strapi-data:
+  strapi-uploads:
   backend-data:
 
 networks:

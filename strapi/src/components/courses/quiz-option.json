@@ -1,0 +1,78 @@
+{
+  "collectionName": "components_courses_quiz_options",
+  "info": {
+    "displayName": "Quiz Option",
+    "icon": "command"
+  },
+  "options": {},
+  "attributes": {
+    "answer_type": {
+      "type": "enumeration",
+      "required": true,
+      "default": "text",
+      "enum": [
+        "text",
+        "number",
+        "media"
+      ]
+    },
+    "explanation": {
+      "type": "text"
+    },
+    "is_correct_answer": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "text_answer": {
+      "type": "string",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "answer_type"
+            },
+            "text"
+          ]
+        }
+      },
+      "required": true
+    },
+    "number_answer": {
+      "type": "decimal",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "answer_type"
+            },
+            "number"
+          ]
+        }
+      },
+      "required": true
+    },
+    "media_answer": {
+      "type": "media",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "answer_type"
+            },
+            "media"
+          ]
+        }
+      },
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  },
+  "config": {}
+}

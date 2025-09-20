@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_profile_professional_experiences",
+  "info": {
+    "displayName": "Professional Experience"
+  },
+  "options": {},
+  "attributes": {
+    "company": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "is_current_job": {
+      "type": "boolean"
+    },
+    "start_date": {
+      "type": "date"
+    },
+    "end_date": {
+      "type": "date"
+    }
+  },
+  "config": {}
+}

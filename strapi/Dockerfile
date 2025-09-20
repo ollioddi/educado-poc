@@ -1,25 +1,32 @@
-FROM node:22-alpine
-# Installing libvips-dev for sharp Compatibility
-ARG UID=1000
-ARG GID=1000
-
-RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev nasm bash vips-dev git
-
-RUN addgroup -g ${GID} strapi && adduser -u ${UID} -G strapi -s /bin/sh -D strapi
-
-ARG NODE_ENV=development
+# Creating multi-stage build for production
+FROM node:22-alpine AS build
+RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev git > /dev/null 2>&1
+ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /opt/
-COPY package.json package-lock.json ./
-RUN npm install -g node-gyp
-RUN npm config set fetch-retry-maxtimeout 600000 -g && npm install
+# Copy workspace files for pnpm
+COPY pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY strapi/package.json ./package.json
+RUN npm install -g node-gyp pnpm
+RUN pnpm config set fetch-retry-maxtimeout 600000 && pnpm install --only=production
+ENV PATH=/opt/node_modules/.bin:$PATH
+WORKDIR /opt/app
+COPY strapi/ .
+RUN pnpm run build
+
+# Creating final production image
+FROM node:22-alpine
+RUN apk add --no-cache vips-dev
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+WORKDIR /opt/
+COPY --from=build /opt/node_modules ./node_modules
+WORKDIR /opt/app
+COPY --from=build /opt/app ./
 ENV PATH=/opt/node_modules/.bin:$PATH
 
-WORKDIR /opt/app
-COPY . .
-RUN chown -R strapi:strapi /opt/app
-USER strapi
-RUN ["npm", "run", "build"]
+RUN chown -R node:node /opt/app
+USER node
 EXPOSE 1337
-CMD ["npm", "run", "develop"]
+CMD ["npm", "run", "start"]

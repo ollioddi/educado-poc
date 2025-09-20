@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "course_sections",
+  "info": {
+    "singularName": "course-section",
+    "pluralName": "course-sections",
+    "displayName": "Course Section"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "course": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::course.course",
+      "inversedBy": "course_sections"
+    },
+    "content_items": {
+      "type": "dynamiczone",
+      "components": [
+        "courses.lesson",
+        "courses.quiz"
+      ]
+    }
+  }
+}

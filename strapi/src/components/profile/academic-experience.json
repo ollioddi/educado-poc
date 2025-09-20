@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_profile_academic_experiences",
+  "info": {
+    "displayName": "Academic Experience"
+  },
+  "options": {},
+  "attributes": {
+    "degree_level": {
+      "type": "enumeration",
+      "enum": [
+        "High School Diploma",
+        "Vocational/Technical Degree",
+        "Associate's Degree",
+        "Bachelor's Degree",
+        "Master's Degree",
+        "Doctorate (Ph.D.)",
+        "Other"
+      ]
+    },
+    "degree_status": {
+      "type": "enumeration",
+      "enum": [
+        "Completed",
+        "In Progress"
+      ]
+    },
+    "course_or_major": {
+      "type": "string"
+    },
+    "institution": {
+      "type": "string"
+    },
+    "start_date": {
+      "type": "date"
+    },
+    "end_date": {
+      "type": "date"
+    }
+  },
+  "config": {}
+}
